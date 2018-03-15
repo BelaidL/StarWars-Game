@@ -1,10 +1,12 @@
-//
-//  StarWarsUITests.swift
-//  StarWarsUITests
-//
-//  Created by lagha on 03/03/2018.
-//  Copyright © 2018 lagha. All rights reserved.
-//
+/******************************************************************
+ *                                                                 *
+ *    GameScene.swift                                              *
+ *    StarWars                                                     *
+ *                                                                 *
+ *    Created by lagha on 03/03/2018.                              *
+ *    Copyright © 2018 lagha. All rights reserved.                 *
+ *                                                                 *
+ *******************************************************************/
 
 import XCTest
 

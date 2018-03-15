@@ -1,12 +1,12 @@
 /******************************************************************
- *                                                                 *
- *    GameScene.swift                                              *
- *    StarWars                                                     *
- *                                                                 *
- *    Created by lagha on 09/03/2018.                              *
- *    Copyright © 2018 lagha. All rights reserved.                 *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+*    GameScene.swift                                              *
+*    StarWars                                                     *
+*                                                                 *
+*    Created by lagha on 09/03/2018.                              *
+*    Copyright © 2018 lagha. All rights reserved.                 *
+*                                                                 *
+*******************************************************************/
 
 
 import SpriteKit
@@ -56,6 +56,10 @@ class MenuScene: SKScene {
         }
     }
     
+    override func mouseUp(with event: NSEvent) {
+        self.touchUp(atPoint: event.location(in: self))
+    }
+    
     func changeDifficulty(){
         let userDefault = UserDefaults.standard
         
@@ -68,7 +72,5 @@ class MenuScene: SKScene {
         }
     }
     
-    override func mouseUp(with event: NSEvent) {
-        self.touchUp(atPoint: event.location(in: self))
-    }
+    
 }

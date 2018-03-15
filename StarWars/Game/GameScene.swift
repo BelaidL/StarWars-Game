@@ -13,6 +13,7 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    var sizeMinAlien: CGFloat = CGFloat(60)
     var scorInit: Bool = true
     var lifeInit:Bool = true
     var lifeLabel: SKLabelNode!
@@ -33,6 +34,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let soldierCategory: UInt32 = 0x1 << 3
     var gameTimer: Timer!
     
+    var menuButton: SKSpriteNode!
+    
+    
     override func sceneDidLoad() {
       
         scoreLabel = SKLabelNode()
@@ -46,13 +50,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lifeLabel.zPosition = 1
         lifeLabel.fontName = "AmericanTypewriter-Bold"
         lifeLabel.fontColor = SKColor.white
+        
+        menuButton = SKSpriteNode()
+        menuButton.texture = SKTexture(imageNamed: "menu")
+        menuButton.size = CGSize.init(width: 465, height: 119)
+        menuButton.name = "menu"
+        menuButton.zPosition = 4
+        menuButton.position = CGPoint(x:0, y:-237)
  
+        
         self.addChild(lifeLabel)
         self.addChild(scoreLabel)
+        var size = CGSize(width: 20, height: 20)
+        if UserDefaults.standard.bool(forKey: "hard") {
+                size = CGSize(width: 200, height: 200)
+                sizeMinAlien = CGFloat(20)
+        }
         self.childNode(withName: "alien")?.physicsBody?.categoryBitMask = alienCategory
         self.childNode(withName: "alien")?.physicsBody?.contactTestBitMask = torpedoCategory
         self.childNode(withName: "alien-1")?.physicsBody?.categoryBitMask = alienCategory
         self.childNode(withName: "alien-1")?.physicsBody?.contactTestBitMask = torpedoCategory
+        (self.childNode(withName: "alien-1") as! SKSpriteNode).size = size
+        
         self.childNode(withName: "alien-2")?.physicsBody?.categoryBitMask = alienCategory
         self.childNode(withName: "alien-2")?.physicsBody?.contactTestBitMask = torpedoCategory
         self.childNode(withName: "soldier")?.physicsBody?.categoryBitMask = soldierCategory
@@ -67,10 +86,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         var body = SKSpriteNode(color: color, size: size)
         
-        if(name != "balle"){
-            body = SKSpriteNode(texture: SKTexture.init(imageNamed: "Image-1"), size: size)
-        }
-        
+        body = SKSpriteNode(texture: SKTexture.init(imageNamed: img), size: size)
+
         body.position = CGPoint(x: pos.x, y: pos.y)
         body.zPosition = 2
         body.name = name
@@ -109,13 +126,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             gameOver.fontSize = 80
             gameOver.fontName = "AmericanTypewriter-Bold"
             gameOver.fontColor = NSColor.red
-            gameOver.zPosition = 3
+            gameOver.zPosition = 4
             gameOver.position = CGPoint(x: 0, y: 0)
             self.addChild(gameOver)
             self.childNode(withName: "soldier")?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+            self.addChild(menuButton)
         }
     }
-    
+
     //reaction a la colusion body et balle
     func reactionAlienTorpedo(torpidoNode: SKSpriteNode, alienNode: SKSpriteNode) {
 
@@ -146,7 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             score += 1
         }
         
-        if alienNode.size.width >= CGFloat(20){
+        if alienNode.size.width >= sizeMinAlien{
             
             let w = alienNode.size.width / CGFloat(2)
             let h = alienNode.size.height / CGFloat(2)
@@ -155,16 +173,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //Dupliquer l'alien en plusueurs de taille plus petite
             if(alienNode.size.width >= CGFloat(100)){
             
-                createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size: size,velocity: CGVector(dx: -90, dy: 70), color: NSColor.gray,img: "Image_1")
+                createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size: size,velocity: CGVector(dx: -90, dy: 70), color: NSColor.gray,img: "Image-1")
             
-                createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size: size,velocity: CGVector(dx: -70, dy: -90), color: NSColor.gray, img: "Image_1")
+                createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size: size,velocity: CGVector(dx: -70, dy: -90), color: NSColor.gray, img: "Image-1")
             }
         
             pos.y = pos.y+(h/2)
-            createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size: size, velocity: CGVector(dx: -100, dy: 90), color: NSColor.gray, img: "Image_1")
+            createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size: size, velocity: CGVector(dx: -100, dy: 90), color: NSColor.gray, img: "Image-1")
             pos.y = pos.y-(h)
             createBody(name: "alien", cat: alienCategory, col: 0, cont: torpedoCategory, pos:pos, size:
-                size, velocity: CGVector(dx: -100, dy: -100),  color: NSColor.gray, img: "Image_1")
+                size, velocity: CGVector(dx: -100, dy: -100),  color: NSColor.gray, img: "Image-1")
         }
         torpidoNode.removeFromParent()
         alienNode.removeFromParent()
@@ -174,10 +192,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             wow.fontSize = 80
             wow.fontName = "AmericanTypewriter-Bold"
             wow.fontColor = NSColor.green
-            wow.zPosition = 3
+            wow.zPosition = 4
             wow.position = CGPoint(x: 0, y: 0)
             self.addChild(wow)
             self.childNode(withName: "soldier")?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+            self.addChild(menuButton)
         }
     }
     
@@ -222,7 +241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let explosion = SKEmitterNode(fileNamed: "Explosion")!
         explosion.position = pos
-        explosion.zPosition = 2
+        explosion.zPosition = 3
         
         self.addChild(explosion)
         self.run(SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: false))
@@ -272,10 +291,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //Fin de la collision
     func didEnd(_ contact: SKPhysicsContact) {
-        
     }
     
-    //Ecouter un clic
+    //Ecouter un clic de souri
+    func touchUp(atPoint pos : CGPoint) {
+        let nodesArray = self.nodes(at: pos)
+        
+        if nodesArray.first?.name == "menu" {
+            let transition = SKTransition.doorsCloseHorizontal(withDuration: 0.5)
+            if let scene = GKScene(fileNamed: "MenuScene") {
+                
+                // Get the SKScene from the loaded GKScene
+                if let sceneNode = scene.rootNode as! MenuScene? {
+                    
+                    // Set the scale mode to scale to fit the window
+                    sceneNode.scaleMode = .aspectFill
+                    
+                    // Present the scene
+                    view?.presentScene(sceneNode, transition: transition)
+                }
+            }
+        }
+    }
+    
+    override func mouseUp(with event: NSEvent) {
+        self.touchUp(atPoint: event.location(in: self))
+    }
+    
+    //Ecouter un clic sur un bouton
     override func keyDown(with event: NSEvent) {
         if life > 0 && self.childNode(withName: "alien") != nil {
             switch event.keyCode {
@@ -284,12 +327,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                  self.run(SKAction.playSoundFileNamed("torpedo.mp3", waitForCompletion: false))
                  let soldier = self.childNode(withName: "soldier")
                  let pos = soldier!.position
-                 let size = CGSize(width: 7.50, height: 4.5)
-             let x = 600*cos(soldier!.zRotation)
-                 let y = 600*sin(soldier!.zRotation)
+                 let size = CGSize(width: 11.0, height: 11.0)
+                 let x = 900*cos(soldier!.zRotation)
+                 let y = 900*sin(soldier!.zRotation)
                  let velocity  = CGVector(dx: x, dy: y)
             
-                 createBody(name: "balle", cat: torpedoCategory, col: 0, cont: alienCategory, pos:pos, size:    size, velocity: velocity, color: NSColor.blue, img: "balle")
+                 createBody(name: "torpedo", cat: torpedoCategory, col: 0, cont: alienCategory, pos:pos, size:    size, velocity: velocity, color: NSColor.blue, img: "torpedo")
             
              case 0x7b:
                  //tourner à gauche
@@ -320,32 +363,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for node in self.children{
             
             if(node.position.x > (self.size.width/2)){
-                if(node.name == "balle"){
-                    self.childNode(withName: "balle")?.removeFromParent()
+                if(node.name == "torpedo"){
+                    self.childNode(withName: "torpedo")?.removeFromParent()
                 }else {
                     node.position.x = -(self.size.width/2)
                 }
             }
             
             if(node.position.x < -(self.size.width/2)){
-                if(node.name == "balle"){
-                    self.childNode(withName: "balle")?.removeFromParent()
+                if(node.name == "torpedo"){
+                    self.childNode(withName: "torpedo")?.removeFromParent()
                 }else{
                     node.position.x = (self.size.width/2)
                 }
             }
             
             if(node.position.y > (self.size.height/2)){
-                if(node.name == "balle"){
-                    self.childNode(withName: "balle")?.removeFromParent()
+                if(node.name == "torpedo"){
+                    self.childNode(withName: "torpedo")?.removeFromParent()
                 }else{
                     node.position.y = -(self.size.height/2)
                 }
             }
             if(node.position.y < -(self.size.height/2)){
                 
-                if(node.name == "balle"){
-                    self.childNode(withName: "balle")?.removeFromParent()
+                if(node.name == "torpedo"){
+                    self.childNode(withName: "torpedo")?.removeFromParent()
                 }else{
                     node.position.y = (self.size.height/2)
                 }
