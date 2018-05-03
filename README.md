@@ -1,6 +1,6 @@
 # StarWars-Game
 
-![alt text](https://raw.githubusercontent.com/BelaidL/StarWars-Game/images/StarWars.png)
+![alt text](https://github.com/BelaidL/StarWars-Game/tree/master/images/StarWars.png)
 
 # Description
 
