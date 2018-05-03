@@ -1,7 +1,6 @@
 # StarWars-Game
 
-![alt text](https://github.com/BelaidL/StarWars-Game/tree/master/images/StarWars.png)
-
+![alt text](https://raw.githubusercontent.com/BelaidL/StarWars-Game/master/images/StarWars.png)
 # Description
 
 This game is a space game that uses a particles mobile emitter for animated star fields and explosions.
