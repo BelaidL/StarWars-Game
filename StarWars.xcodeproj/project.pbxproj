@@ -133,6 +133,7 @@
 		905362BB204B20170097E0AA = {
 			isa = PBXGroup;
 			children = (
+				907D78172097B65700C29071 /* images */,
 				905362C6204B20180097E0AA /* StarWars */,
 				905362DF204B20180097E0AA /* StarWarsTests */,
 				905362EA204B20180097E0AA /* StarWarsUITests */,
@@ -184,6 +185,13 @@
 				905362ED204B20180097E0AA /* Info.plist */,
 			);
 			path = StarWarsUITests;
+			sourceTree = "<group>";
+		};
+		907D78172097B65700C29071 /* images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
